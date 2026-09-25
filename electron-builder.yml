@@ -1,0 +1,28 @@
+appId: com.github.haqadn.badgeprinter
+productName: Badge Printer
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**/*
+  - package.json
+  - LICENSE
+fileAssociations:
+  - ext: badge
+    name: Badge Template
+    role: Editor
+win:
+  target: nsis
+mac:
+  target: dmg
+  category: public.app-category.productivity
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Office
+  maintainer: haqadn
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  license: LICENSE

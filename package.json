@@ -1,0 +1,43 @@
+{
+  "name": "badge-printer",
+  "productName": "Badge Printer",
+  "version": "0.1.0",
+  "description": "Design badge templates and print them in bulk from a CSV file.",
+  "main": "./out/main/index.js",
+  "license": "GPL-3.0-or-later",
+  "author": "haqadn",
+  "homepage": "https://github.com/haqadn/badge-printer",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "dist": "electron-vite build && electron-builder",
+    "dist:dir": "electron-vite build && electron-builder --dir"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/papaparse": "^5.5.2",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^44.4.0",
+    "electron-builder": "^26.0.0",
+    "electron-vite": "^5.0.0",
+    "fflate": "^0.8.3",
+    "papaparse": "^5.5.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vitest": "^5.0.0",
+    "zustand": "^5.0.0"
+  }
+}
