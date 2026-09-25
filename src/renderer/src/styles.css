@@ -208,6 +208,7 @@ code {
 .sidebar {
   background: var(--surface);
   overflow-y: auto;
+  overflow-x: hidden;
   width: 290px;
   flex: none;
 }
@@ -216,9 +217,10 @@ code {
 }
 .sidebar.right {
   border-left: 1px solid var(--border);
+  width: 310px;
 }
 .sidebar.wide {
-  width: 400px;
+  width: clamp(400px, 32vw, 600px);
 }
 .panel-section {
   padding: 10px 12px 12px;
@@ -288,7 +290,7 @@ code {
 .segmented button {
   border: none;
   border-radius: 0;
-  padding: 3px 10px;
+  padding: 3px 8px;
 }
 .segmented button + button {
   border-left: 1px solid var(--border);
@@ -492,7 +494,8 @@ label.inline {
 .stock-picker {
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4px 6px;
 }
 .stock-picker img {
   width: 28px;

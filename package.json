@@ -15,7 +15,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "test": "vitest run",
     "dist": "electron-vite build && electron-builder",
-    "dist:dir": "electron-vite build && electron-builder --dir"
+    "dist:dir": "electron-vite build && electron-builder --dir",
+    "screenshots": "node scripts/screenshots.mjs",
+    "build:example": "node scripts/build-example.mjs"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1"
@@ -32,6 +34,7 @@
     "electron-vite": "^5.0.0",
     "fflate": "^0.8.3",
     "papaparse": "^5.5.0",
+    "playwright-core": "1.56",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -2,23 +2,58 @@
 
 A desktop app for printing event badges in bulk from a CSV file onto **pre-printed badge stock**.
 
-- **Visual template designer.** Load a picture of your stock design as a guide, then draw placeholder boxes on it.
-  - A placeholder holds text with `{{Column Name}}` tokens. They are filled from the CSV column of the same name, and you can mix in plain text, e.g. `{{First}} {{Last}}`.
-  - Each box is the area the text may grow into. Set horizontal and vertical alignment, **max and min font size**, max lines, weight, colour, case, letter spacing, and what happens when text is too long: keep shrinking, cut off with …, or clip.
-  - **QR codes** get their content from columns, e.g. `https://example.com/t/{{ID}}`.
-  - **Conditional fields**: show a field only when a column has, or doesn't have, a value (e.g. a "MICRO" label only for `Type = Microsponsor`).
-  - Snapping guides, arrow-key nudging, locking, layers, undo/redo.
-- **Optional back side (fold mode).** Both sides print on one double-length piece of stock that you fold in half, either top/bottom (the back is turned 180°) or left/right. The back can repeat the front layout or have its own.
-- **Portable templates.** A `.badge` file is a zip holding the layout, the stock preview images and any embedded fonts.
-- **Data view with live preview.** Browse the loaded rows with search, per-column filters and printed / not-printed status. Move through rows with the arrow keys and the badge preview beside the list updates, with a warning when text doesn't fit.
-  - <kbd>Space</kbd> selects a row and <kbd>Enter</kbd> prints it.
-  - Fix a typo or add a walk-in attendee without touching the CSV.
-  - If the CSV's headers differ from the template's, map them.
-- **Batched printing.** Badges go to the printer in small batches (10 by default, with an optional pause between batches). Only one batch is laid out and spooled at a time, so neither the printer's memory nor the computer's fills up on large runs. You can cancel a run midway, and each badge is marked printed as its batch goes out.
-- **PDF export**, built from the same batches.
-- **Alignment calibration.** Shift everything by fractions of a millimetre to line up with the pre-printed stock.
+Design where each attendee's details go on your stock, load the attendee list, and print one badge or hundreds.
 
-The stock design image is never printed. It is only a guide for placing fields.
+![The template designer, with the name placeholder selected on top of the stock design](docs/screenshots/designer.png)
+
+## Features
+
+### Design placements on your stock
+
+- Load a picture of your badge stock as a guide, then draw placeholder boxes on it. The stock picture is **never printed**; it is only there so you can line things up.
+- A text placeholder holds `{{Column Name}}` tokens that are filled from the CSV column of the same name. You can mix in plain text, e.g. `{{First}} {{Last}}` or `#{{ID}}`. Click a column chip to insert its token.
+- Each box is the area the text may grow into. You choose:
+  - horizontal and vertical alignment
+  - **max and min font size**; text gets as big as the box allows, up to the max
+  - max lines, weight, colour, italics, case, letter spacing and line height
+  - what happens if it still doesn't fit: keep shrinking, cut off with …, or clip
+- **QR codes** get their content from columns too, e.g. `https://example.com/checkin/{{ID}}`.
+- **Conditional fields** show only when a column matches a rule, e.g. a thank-you note only when `Type` contains "sponsor".
+- Snapping guides, arrow-key nudging, locking, layers, and undo/redo.
+- Templates save as a single `.badge` file holding the layout, the stock images and any embedded fonts, so a template prints the same on any computer.
+
+### Browse attendees with a live preview
+
+![The attendee list with the focused row's badge previewed beside it](docs/screenshots/data-view.png)
+
+- Move through the list with the arrow keys and the badge beside it follows. Long names shrink and wrap to fit, and a warning appears if text can't fit even at the minimum size.
+- <kbd>Space</kbd> selects a row and <kbd>Enter</kbd> (or a double-click) prints it.
+- Search all columns, filter by any column's values, or show only badges not printed yet.
+- Printed badges are ticked off, so it's easy to pick up where you left off or reprint one.
+- Fix a typo in a row or add a walk-in attendee without editing the CSV.
+- If the CSV's headers differ from the ones the template uses, pick which column to use instead.
+
+| Conditional field (sponsors get a thank-you note) | Optional back side, printed in fold mode |
+|---|---|
+| <img src="docs/screenshots/preview-sponsor.png" alt="A sponsor's badge showing the thank-you note next to the QR code" width="300"> | <img src="docs/screenshots/fold-preview.png" alt="Front and back previews of a fold-mode badge" width="400"> |
+
+### Print in batches
+
+<img src="docs/screenshots/print-dialog.png" alt="Print dialog with printer, batch size, pause and alignment shift settings" width="460">
+
+- Badges go to the printer in small batches, 10 by default. Only one batch is laid out and spooled at a time, so neither the printer's memory nor the computer's fills up on a large run. An optional pause between batches lets slow printers catch up.
+- A run can be cancelled partway through. Each badge is marked printed as its batch goes out.
+- **Fold mode** prints the back on the same piece of stock, either below the front (turned 180° so it reads upright once folded) or beside it. The back can repeat the front or have its own layout.
+- **Alignment shift**: nudge everything by fractions of a millimetre to line up with the pre-printed stock. The shift is remembered.
+- **Export to PDF** instead of printing, built from the same batches.
+
+## Try it with the example
+
+`examples/community-conf/` has a sample template (`community-conf.badge`), the stock design it was made for, and an attendee list (`attendees.csv`). Open the template with **Open…**, then load the CSV with **Load CSV…**.
+
+### Printing tips
+
+Set the printer's paper size to the stock size (doubled in fold mode) with no margins. Print one sample badge on plain paper, hold it against a piece of stock, and correct any offset with **Batching and alignment → Shift right / Shift down** in the print dialog.
 
 ## Development
 
@@ -28,6 +63,8 @@ npm run dev        # run the app with hot reload
 npm test           # unit tests
 npm run typecheck
 npm run dist       # build an installer for the current OS into dist/
+npm run build:example   # rebuild examples/community-conf/community-conf.badge
+npm run build && npm run screenshots   # regenerate docs/screenshots (use xvfb-run -a on a headless Linux box)
 ```
 
 Built with Electron, React, TypeScript and electron-vite.
@@ -43,10 +80,6 @@ Built with Electron, React, TypeScript and electron-vite.
 | `src/renderer/src/designer/` | The template designer. |
 | `src/renderer/src/data/` | The row list and preview panel. |
 | `src/renderer/src/print/` | The print dialog, and `PrintRoot`, which lays out a batch in the hidden print window. |
-
-### Printing tips
-
-Set the printer's paper size to the stock size (doubled in fold mode) with no margins. Print one sample badge on plain paper, hold it against a piece of stock, and correct any offset with **Batching and alignment → Shift right / Shift down** in the print dialog. The shift is remembered.
 
 ## License
 

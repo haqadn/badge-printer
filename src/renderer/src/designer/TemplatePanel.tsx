@@ -124,6 +124,7 @@ function StockPicker({ side }: { side: 'front' | 'back' }) {
         {stock && (
           <button
             className="link"
+            title="Remove image"
             onClick={() =>
               useStore.getState().update((d) => {
                 if (side === 'front') d.front.stock = null
@@ -131,7 +132,7 @@ function StockPicker({ side }: { side: 'front' | 'back' }) {
               })
             }
           >
-            Remove
+            ✕
           </button>
         )}
       </span>
