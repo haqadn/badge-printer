@@ -26,9 +26,17 @@ export default function PrintDialog({ keys, label, onClose }: { keys: string[]; 
 
   const patch = (p: Partial<PrintSettings>): void => setSettings((s) => ({ ...s, ...p }))
 
+  /** Settings with the chosen printer's display name, so it can be shown elsewhere. */
+  const labelled = (): PrintSettings => ({
+    ...settings,
+    printerLabel: printers?.find((p) => p.name === settings.printer)?.displayName ?? settings.printerLabel
+  })
+
   const go = async (): Promise<void> => {
-    if (await startPrint(keys, settings, mark)) onClose()
+    if (await startPrint(keys, labelled(), mark)) onClose()
   }
+
+  const single = keys.length === 1
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
@@ -98,8 +106,24 @@ export default function PrintDialog({ keys, label, onClose }: { keys: string[]; 
           <input type="checkbox" checked={mark} onChange={(e) => setMark(e.target.checked)} /> Mark as printed
         </label>
 
+        {single && settings.target === 'printer' && (
+          <p className="muted small">
+            From now on, <b>Print this badge</b>, <kbd>Enter</kbd> and double-click print straight to this printer.
+            Use <b>Change…</b> under the preview to come back here.
+          </p>
+        )}
+
         <footer className="modal-actions">
-          <button onClick={() => (saveSettings(settings), onClose())}>Cancel</button>
+          <button onClick={onClose}>Cancel</button>
+          <button
+            onClick={() => {
+              saveSettings(labelled())
+              onClose()
+            }}
+            title="Keep these settings without printing"
+          >
+            Save settings
+          </button>
           <button
             className="primary"
             disabled={keys.length === 0 || (settings.target === 'printer' && !settings.printer)}

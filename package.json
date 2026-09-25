@@ -1,7 +1,7 @@
 {
   "name": "badge-printer",
   "productName": "Badge Printer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Design badge templates and print them in bulk from a CSV file.",
   "main": "./out/main/index.js",
   "license": "GPL-3.0-or-later",

@@ -16,6 +16,11 @@ win:
 mac:
   target: dmg
   category: public.app-category.productivity
+  # Ad-hoc signature: without any signature, Apple Silicon Macs report downloaded apps
+  # as "damaged". Ad-hoc signed apps get the milder "unidentified developer" prompt.
+  # Hardened runtime would reject Electron's own pre-signed frameworks under ad-hoc signing.
+  identity: '-'
+  hardenedRuntime: false
 linux:
   target:
     - AppImage

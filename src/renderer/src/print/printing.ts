@@ -24,11 +24,30 @@ export function loadSettings(): PrintSettings {
 }
 
 export function saveSettings(s: PrintSettings): void {
+  usePrintSettings.setState({ settings: s })
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(s))
   } catch {
     // Not fatal: settings just won't be remembered.
   }
+}
+
+/** The saved print settings, kept in a store so the UI updates when they change. */
+export const usePrintSettings = create<{ settings: PrintSettings }>(() => ({ settings: loadSettings() }))
+
+/** True once a printer is saved, so single badges can print without the dialog. */
+export function canQuickPrint(s: PrintSettings): boolean {
+  return s.target === 'printer' && !!s.printer
+}
+
+/**
+ * Prints one badge straight to the saved printer, or opens the print dialog when no
+ * printer has been chosen yet.
+ */
+export function quickPrint(key: string, openDialog: (keys: string[], label: string) => void): void {
+  const settings = usePrintSettings.getState().settings
+  if (canQuickPrint(settings)) void startPrint([key], settings, true)
+  else openDialog([key], 'this badge')
 }
 
 interface JobState {
