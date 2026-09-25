@@ -47,6 +47,15 @@ Design where each attendee's details go on your stock, load the attendee list, a
 - **Alignment shift**: nudge everything by fractions of a millimetre to line up with the pre-printed stock. The shift is remembered.
 - **Export to PDF** instead of printing, built from the same batches.
 
+## Install
+
+Download the installer for your system from the [latest release](https://github.com/haqadn/badge-printer/releases/latest). It runs on Windows 10 or later (64-bit), macOS on Apple Silicon, and 64-bit Linux.
+
+The installers aren't signed with a paid developer certificate yet, so the first launch shows a warning:
+
+- **Windows:** on the SmartScreen prompt, click **More info → Run anyway**.
+- **macOS:** after dragging the app to Applications, right-click it and choose **Open**, or go to **System Settings → Privacy & Security** and click **Open Anyway**.
+
 ## Try it with the example
 
 `examples/community-conf/` has a sample template (`community-conf.badge`), the stock design it was made for, and an attendee list (`attendees.csv`). Open the template with **Open…**, then load the CSV with **Load CSV…**.

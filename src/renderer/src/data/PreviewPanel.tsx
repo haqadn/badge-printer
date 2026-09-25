@@ -2,7 +2,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Badge } from '@/badge/Badge'
 import { useStore } from '@/store/store'
-import { loadSettings, startPrint } from '@/print/printing'
+import { canQuickPrint, quickPrint, usePrintSettings } from '@/print/printing'
 
 const PX_PER_MM = 96 / 25.4
 
@@ -15,6 +15,7 @@ export default function PreviewPanel({ onPrint }: { onPrint: (keys: string[], la
   const printedAt = useStore((s) => (row ? s.printed[row.key] : undefined))
   const [frontOver, setFrontOver] = useState<string[]>([])
   const [backOver, setBackOver] = useState<string[]>([])
+  const printSettings = usePrintSettings((s) => s.settings)
   const [width, setWidth] = useState(360)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -42,11 +43,7 @@ export default function PreviewPanel({ onPrint }: { onPrint: (keys: string[], la
     (id) => [...template.front.fields, ...template.back.layout.fields].find((f) => f.id === id)?.name ?? id
   )
 
-  const print = (): void => {
-    const settings = loadSettings()
-    if (settings.target === 'printer' && settings.printer) void startPrint([row.key], settings, true)
-    else onPrint([row.key], 'this badge')
-  }
+  const print = (): void => quickPrint(row.key, onPrint)
 
   return (
     <div className="preview-panel" ref={ref}>
@@ -92,6 +89,22 @@ export default function PreviewPanel({ onPrint }: { onPrint: (keys: string[], la
           </button>
         )}
       </div>
+      <p className="muted small print-target">
+        {canQuickPrint(printSettings) ? (
+          <>
+            Prints straight to <strong>{printSettings.printerLabel || printSettings.printer}</strong>
+            {printSettings.offset.x || printSettings.offset.y
+              ? ` (shifted ${printSettings.offset.x} mm, ${printSettings.offset.y} mm)`
+              : ''}{' '}
+            ·{' '}
+          </>
+        ) : (
+          'You’ll choose a printer the first time you print. '
+        )}
+        <button className="link" onClick={() => onPrint([row.key], 'this badge')}>
+          {canQuickPrint(printSettings) ? 'Change…' : 'Print settings…'}
+        </button>
+      </p>
 
       <details className="row-editor" open>
         <summary>Row values</summary>

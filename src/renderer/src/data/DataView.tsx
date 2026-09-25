@@ -5,7 +5,7 @@ import type { DataRow } from '@/io/csv'
 import { openCsvAction } from '@/store/actions'
 import { useStore } from '@/store/store'
 import PrintDialog, { JobStatusBar } from '@/print/PrintDialog'
-import { loadSettings, startPrint } from '@/print/printing'
+import { quickPrint } from '@/print/printing'
 import PreviewPanel from './PreviewPanel'
 
 const ROW_HEIGHT = 32
@@ -152,10 +152,8 @@ function RowTable({ onPrint }: { onPrint: (keys: string[], label: string) => voi
   }
 
   const printOne = (r: DataRow): void => {
-    const settings = loadSettings()
     // Once a printer has been set up, printing a single badge is one keystroke.
-    if (settings.target === 'printer' && settings.printer) void startPrint([r.key], settings, true)
-    else onPrint([r.key], 'this badge')
+    quickPrint(r.key, onPrint)
   }
 
   const onKeyDown = (e: React.KeyboardEvent): void => {

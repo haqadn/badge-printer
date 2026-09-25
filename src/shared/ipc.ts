@@ -29,6 +29,8 @@ export interface PrintSettings {
   /** `printer` sends to a printer silently; `pdf` writes a PDF file. */
   target: 'printer' | 'pdf'
   printer: string
+  /** The printer's display name, for showing which printer quick prints go to. */
+  printerLabel?: string
   /** Badges per print job. Small batches keep printer and app memory low. */
   batchSize: number
   /** Pause between batches, giving the printer time to drain its buffer. */
